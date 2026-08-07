@@ -1,0 +1,85 @@
+/* 独白 (Soliloquy) — 动画样式表 */
+
+/* Pure Water Flowing Animations (5 Layers) */
+.water-parallax > use {
+  animation: gentle-water-flow 18s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+.water-parallax > .water-layer-1 {
+  opacity: 0.20;
+  animation-duration: 22s;
+  animation-delay: -5s;
+}
+
+.water-parallax > .water-layer-2 {
+  opacity: 0.38;
+  animation-duration: 17s;
+  animation-delay: -3s;
+}
+
+.water-parallax > .water-layer-3 {
+  opacity: 0.58;
+  animation-duration: 13s;
+  animation-delay: -6s;
+}
+
+.water-parallax > .water-layer-4 {
+  opacity: 0.78;
+  animation-duration: 9.5s;
+  animation-delay: -2s;
+}
+
+.water-parallax > .water-layer-5 {
+  opacity: 0.95;
+  animation-duration: 7s;
+  animation-delay: -1s;
+}
+
+/* Undulating flow of river water */
+@keyframes gentle-water-flow {
+  0% {
+    transform: translate3d(-100px, 0, 0);
+  }
+  100% {
+    transform: translate3d(100px, 6px, 0);
+  }
+}
+
+/* Class to pause animations when disabled by user */
+.animations-paused .water-parallax > use {
+  animation-play-state: paused !important;
+}
+
+/* Subtle fade-in animations for quotes and cards */
+.quote-fade-in {
+  animation: quoteFadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes quoteFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Fade-in for color badge label */
+.badge-fade-in {
+  animation: badgeFadeIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes badgeFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,513 @@
+/* 独白 (Soliloquy) — 主样式表 */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  /* Pure White Background Theme Colors */
+  --bg-color: #ffffff;
+  --text-primary: #3c3c39;   /* Softened for refined literary elegance */
+  --text-secondary: #6c6c68; /* Softened secondary text */
+  --text-muted: #989893;     /* Softened muted labels */
+  --theme-color: #313b35;    /* Active cultural color */
+  
+  --ui-bg: rgba(255, 255, 255, 0.9);
+  --ui-border: rgba(0, 0, 0, 0.06);
+  --ui-text: #3c3c39;
+  --ui-hover: rgba(0, 0, 0, 0.04);
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.06);
+  
+  --font-serif-zh: 'Noto Serif SC', 'FZXiJinLJW', 'Songti SC', 'STSong', 'SimSun', serif;
+  --font-serif-en: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+  --font-serif: var(--font-serif-zh);
+  
+  --transition-smooth: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-serif);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.8s ease;
+  position: relative;
+}
+
+/* Background WebGL FBM Water Animation (Lower Half of Page) */
+.wave-background {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52vh; /* Displayed strictly on the lower half of the page */
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.shader-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Main Container */
+.container {
+  width: 100%;
+  max-width: 960px;
+  padding: 0 40px;
+  z-index: 2;
+  text-align: center;
+  margin-top: -6vh; /* Raised slightly for visual balance against taller waves */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Quote Layout */
+.quote-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.quote-content {
+  font-size: clamp(1.5rem, 2.3vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1.85;
+  color: var(--text-primary);
+  margin: 0 auto 24px auto;
+  letter-spacing: 0.06em;
+  
+  /* 严格中文避头尾排版规范方案 */
+  text-align: justify;
+  text-align-last: center;       /* 居中对齐最后一行 */
+  line-break: strict;            /* 严格执行中文避头尾规则 (严禁标点出现在行首) */
+  word-break: break-all;          /* 优化中英混排，防止单词挤落导致行末大片留白 */
+  text-justify: inter-character; /* 优化东亚字距排版引擎 */
+  overflow-wrap: break-word;
+
+  max-width: 820px;
+  width: 90%;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.quote-content:hover {
+  color: var(--theme-color);
+  transform: translateY(-2px);
+}
+
+.quote-content::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: var(--theme-color);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.quote-content:hover::after {
+  width: 40px;
+}
+
+.quote-author-line {
+  margin-bottom: 20px;
+}
+
+.quote-author {
+  font-family: var(--font-serif-en); /* High-气质 English Serif */
+  font-size: clamp(1.1rem, 1.4vw, 1.4rem); /* Graceful Cormorant Garamond sizing */
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  cursor: pointer;
+  outline: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.quote-author:hover {
+  color: var(--theme-color);
+  transform: translateY(-1px);
+}
+
+.quote-translation {
+  font-family: var(--font-serif-en); /* Elegant English Serif */
+  font-size: clamp(0.95rem, 1.2vw, 1.25rem); /* Scaled Cormorant Garamond */
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 80%;
+  margin-top: 10px;
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
+
+/* Color Badge Info (Top-Right) */
+.color-badge {
+  position: absolute;
+  top: 40px;
+  right: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Right align elements */
+  text-align: right;
+  z-index: 3;
+  font-size: 0.8rem;
+  font-family: var(--font-serif);
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  pointer-events: auto;
+}
+
+.color-origin {
+  color: var(--text-muted);
+  font-size: clamp(0.75rem, 1vw, 1rem); /* Dynamically scaled */
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.color-name-zh {
+  color: var(--theme-color); /* Render name in theme color! */
+  font-size: clamp(2rem, 3.4vw, 3.8rem); /* Significantly enlarged color name */
+  font-weight: 500;
+  margin-bottom: 2px;
+  transition: color 0.8s ease;
+}
+
+.color-name-en {
+  font-family: var(--font-serif-en);
+  color: var(--text-secondary);
+  font-size: clamp(1.1rem, 1.6vw, 1.7rem); /* Cormorant Garamond English color name */
+  margin-bottom: 4px;
+}
+
+.color-hex {
+  color: var(--text-muted);
+  font-size: clamp(0.8rem, 1.1vw, 1.1rem); /* Scaled HEX */
+  font-family: monospace;
+}
+
+.color-sub {
+  font-family: var(--font-serif-en);
+  color: var(--text-secondary);
+  font-size: clamp(0.95rem, 1.2vw, 1.3rem);
+  font-style: italic;
+}
+
+.color-hex-tag {
+  color: var(--text-muted);
+  font-size: clamp(0.75rem, 0.95vw, 1rem);
+  font-family: monospace;
+  margin-left: 2px;
+}
+
+/* Control Buttons (Floating Bottom-Right) */
+.control-actions {
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+  z-index: 3;
+  opacity: 0.15; /* Extremely subtle when not focused */
+  transition: opacity 0.3s ease;
+}
+
+.control-actions:hover {
+  opacity: 0.9;
+}
+
+.action-btn {
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-border);
+  color: var(--ui-text);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: var(--ui-hover);
+  border-color: var(--theme-color);
+  color: var(--theme-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+/* Settings Drawer (Right Side) */
+.settings-drawer {
+  position: absolute;
+  top: 0;
+  right: -360px; /* Hidden by default */
+  width: 340px;
+  height: 100%;
+  background: var(--ui-bg);
+  border-left: 1px solid var(--ui-border);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.settings-drawer.open {
+  right: 0;
+}
+
+.settings-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--ui-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-header h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: var(--theme-color);
+}
+
+.settings-body {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-item label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.settings-item select {
+  background: var(--bg-color);
+  border: 1px solid var(--ui-border);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.settings-item select:focus {
+  border-color: var(--theme-color);
+}
+
+.settings-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-item-row label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--ui-border);
+  transition: .3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--ui-bg);
+  transition: .3s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+input:checked + .slider {
+  background-color: var(--theme-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.settings-tips {
+  margin-top: 15px;
+  background: rgba(0,0,0,0.02);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  border: 1px dashed var(--ui-border);
+}
+
+[data-theme="dark"] .settings-tips {
+  background: rgba(255,255,255,0.02);
+}
+
+.settings-tips h4 {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.settings-tips ul {
+  list-style-type: none;
+}
+
+.settings-tips li {
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+.settings-tips li strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.settings-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--ui-border);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Drawer Overlay */
+.drawer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.1);
+  z-index: 9;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Keyboard/Aesthetic Accessibility Focus Outline */
+.quote-content:focus, .quote-author:focus, .action-btn:focus {
+  outline: 1px dashed var(--theme-color);
+  outline-offset: 4px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .quote-content {
+    line-height: 1.5;
+  }
+  
+  .quote-translation {
+    max-width: 95%;
+  }
+  
+  .container {
+    padding: 0 24px;
+    margin-top: -12vh; /* Slightly offset on mobile due to height constraints */
+  }
+  
+  .color-badge {
+    top: 25px;
+    right: 25px;
+  }
+  
+  .control-actions {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .wave-background {
+    height: 40vh; /* Tilted waves on mobile */
+  }
+}
